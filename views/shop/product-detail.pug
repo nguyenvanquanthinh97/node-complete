@@ -1,0 +1,19 @@
+extends ../layouts/main-layout.pug 
+
+block style
+    link(rel="stylesheet", href="/css/product.css")
+
+block content 
+    .grid
+        article.card.product-item
+            header.card__header
+                h1.product__title #{product.title}
+            .card__image
+                img(src=product.imageUrl, alt=product.title)
+            .card__content
+                h2.product__price #{product.price}
+                p.product__description #{product.description}
+            .card__actions
+                form(action="/shop/cart", method="post")
+                    input(type="hidden", name="productId", value=product._id)
+                    button.btn(type="submit") Add to cart                                                                                        

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        title= docTitle
+        link(rel="stylesheet", href="/css/main.css")
+        block style
+    body
+        div.backdrop
+        header.main-header
+            button#side-menu-toggle Menu
+            nav.main-header__nav
+                ul.main-header__item-list
+                    li.main-header__item 
+                        a(href="/shop", class=(path === '/shop' ? 'active' : '')) Shop
+                    li.main-header__item
+                        a(href="/shop/products", class=(path === '/shop/products' ? 'active' : '')) Products
+                    li.main-header__item
+                        a(href="/shop/cart", class=(path === '/shop/cart' ? 'active' : '')) Cart
+                    li.main-header__item
+                        a(href="/shop/orders", class=(path === '/shop/orders' ? 'active' : '')) Orders
+                    li.main-header__item
+                        a(href="/admin/add-product", class=(path === '/admin/add-product' ? 'active' : '')) Add Product
+                    li.main-header__item
+                        a(href="/admin/products", class=(path === '/admin/products' ? 'active' : '')) Admin Products
+        
+        nav.mobile-nav
+            ul.mobile-nav__item-list 
+                li.mobile-nav__item
+                    a(href="/shop", class=(path === '/shop' ? 'active' : '')) Shop
+                li.mobile-nav__item
+                    a(href="/shop/products", class=(path === '/shop/products' ? 'active' : '')) Products
+                li.mobile-nav__item
+                    a(href="/shop/cart", class=(path === '/shop/cart' ? 'active' : '')) Cart
+                li.mobile-nav__item
+                    a(href="/shop/orders", class=(path === '/shop/orders' ? 'active' : '')) Orders
+                li.mobile-nav__item
+                    a(href="/admin/add-product", class=(path === '/admin/add-product' ? 'active' : '')) Add Product
+                li.mobile-nav__item
+                    a(href="/admin/products", class=(path === '/admin/products' ? 'active' : '')) Admin Products
+        
+        main
+            block content
+
+        script(src="/js/script.js")
