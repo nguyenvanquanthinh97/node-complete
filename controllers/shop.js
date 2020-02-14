@@ -8,7 +8,8 @@ module.exports.getProducts = (req, res, next) => {
             res.render('shop/product-list', {
                 products,
                 docTitle: "All Products",
-                path: '/shop/products'
+                path: '/shop/products',
+                isAuthenticated: (_.get(req.cookies, 'loggedIn') === 'true')
             });
         });
 };
@@ -21,7 +22,8 @@ module.exports.getProductDetail = (req, res, next) => {
             res.render('shop/product-detail', {
                 product,
                 docTitle: 'Product Detail',
-                path: '/shop/product-detail'
+                path: '/shop/product-detail',
+                isAuthenticated: (_.get(req.cookies, 'loggedIn') === 'true')
             });
         });
 };
@@ -32,7 +34,8 @@ module.exports.getIndex = (req, res, next) => {
             res.render('shop/index', {
                 products,
                 docTitle: "Shop",
-                path: '/shop'
+                path: '/shop',
+                isAuthenticated: (_.get(req.cookies, 'loggedIn') === 'true')
             });
         });
 };
@@ -43,7 +46,8 @@ module.exports.getCart = (req, res, next) => {
             res.render('shop/cart', {
                 path: '/shop/cart',
                 docTitle: 'Your cart',
-                products: cartProducts
+                products: cartProducts,
+                isAuthenticated: (_.get(req.cookies, 'loggedIn') === 'true')
             });
         });
 };
@@ -77,7 +81,8 @@ module.exports.getOrders = (req, res, next) => {
             res.render('shop/orders', {
                 path: '/shop/orders',
                 docTitle: 'Your order',
-                orders
+                orders,
+                isAuthenticated: (_.get(req.cookies, 'loggedIn') === 'true')
             });
         });
 };
@@ -85,6 +90,7 @@ module.exports.getOrders = (req, res, next) => {
 module.exports.getCheckout = (req, res, next) => {
     res.render('shop/checkout', {
         path: '/shop/checkout',
-        docTitle: 'Checkout'
+        docTitle: 'Checkout',
+        isAuthenticated: (_.get(req.cookies, 'loggedIn') === 'true')
     });
 };

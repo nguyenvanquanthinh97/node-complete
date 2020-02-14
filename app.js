@@ -2,11 +2,13 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const _ = require('lodash');
 
 const mongoDB = require('./utils/database');
 const adminRoute = require('./routes/admin');
 const shopRoute = require('./routes/shop');
+const authRoute = require('./routes/auth');
 const errorsController = require('./controllers/errors');
 
 const User = require('./models/user');
@@ -15,13 +17,15 @@ const app = express();
 
 const port = 5000;
 
+app.use(cookieParser());
+
 app.use((req, res, next) => {
     User.findById("5e444d9d89319a581fb669db")
         .then(user => {
             req.user = new User(user.username, user.email, user.cart, user._id);
             next();
         })
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -34,16 +38,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/admin', adminRoute);
 app.use('/shop', shopRoute);
+app.use('/auth', authRoute);
 
 app.get('/', (req, res, next) => {
     res.redirect('/shop');
 });
 
 app.use(errorsController.error404);
-
-// app.listen(port, () => {
-//     console.log("Server is litening on port", port);
-// });
 
 mongoDB.initialConnect(() => {
     app.listen(port, () => {

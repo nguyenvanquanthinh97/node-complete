@@ -1,0 +1,16 @@
+extends ../layouts/main-layout.pug
+
+block style 
+    link(rel="stylesheet", href="/css/form.css")
+    link(rel="stylesheet", href="/css/auth.css")
+
+block content
+    .login-form
+        form(action="/auth/login", method="post")
+            .form-control
+                label(for="username") Username:
+                input#username(type="text", name="username")
+            .form-control
+                label(for="password") Password:
+                input#password(type="password", name="password")
+            button.btn(type="submit") Sign in
