@@ -1,0 +1,26 @@
+extends ../layouts/main-layout.pug
+
+block style 
+    link(rel="stylesheet", href="/css/form.css")
+    link(rel="stylesheet", href="/css/auth.css")
+
+block content
+    .login-form
+        if error
+            .user-message.user-message--error
+                p=error
+        form(action="/auth/signup", method="post")
+            input(type="hidden", name="_csrf", value = csrfToken) 
+            .form-control
+                label(for="username") Username
+                input#username(type="text", name="username")
+            .form-control
+                label(for="email") Email
+                input#email(type="email", name="email") 
+            .form-control
+                label(for="password") Password
+                input#password(type="password", name="password")
+            .form-control
+                label(for="confirmPassword") Confirm Password
+                input#confirmPassword(type="password", name="confirmPassword")
+            button.btn(type="submit") Sign up

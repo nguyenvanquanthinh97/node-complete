@@ -2,18 +2,20 @@ const { ObjectId } = require('mongodb');
 const getDB = require('../utils/database').getDB;
 
 module.exports = class User {
-    constructor(username, email, cart, id) {
+    constructor(username, email, cart, id, password) {
         this.username = username;
         this.email = email;
         this.cart = cart;
-        this._id = id;
+        if (id.toString().trim().length > 0) {
+            this._id = id;
+        }
+        this.password = password;
     }
 
     save() {
         const db = getDB();
         return db.collection('users')
-            .insertOne(this)
-            .catch(err => console.log(err));
+            .insertOne(this);
     }
 
     addToCart(productId) {
@@ -111,10 +113,23 @@ module.exports = class User {
             .catch(err => console.log(err));
     }
 
+    static updateToken(userId, token, expiration) {
+        const db = getDB();
+
+        return db.collection('users')
+            .updateOne({ _id: new ObjectId(userId) }, { $set: { token: token, expiration: expiration } });
+    }
+
     static findById(userId) {
         const db = getDB();
         return db.collection('users')
             .findOne({ _id: new ObjectId(userId) })
             .catch(err => console.log(err));
+    }
+
+    static findByEmail(email) {
+        const db = getDB();
+        return db.collection('users')
+            .findOne({ email: email });
     }
 };

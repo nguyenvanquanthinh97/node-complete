@@ -4,18 +4,19 @@ const express = require('express');
 const _ = require('lodash');
 const router = express.Router();
 
+const authenticationMiddleware = require('../middleware/authentication');
 const adminController = require('../controllers/admin');
 
-router.get('/add-product', adminController.getAddProduct);
+router.get('/add-product', authenticationMiddleware, adminController.getAddProduct);
 
-router.get('/products', adminController.getProducts);
+router.get('/products', authenticationMiddleware, adminController.getProducts);
 
-router.post('/add-product', adminController.postAddProduct);
+router.post('/add-product', authenticationMiddleware, adminController.postAddProduct);
 
-router.get('/edit-product/:productId', adminController.getEditProduct);
+router.get('/edit-product/:productId', authenticationMiddleware, adminController.getEditProduct);
 
-router.post('/edit-product', adminController.updateProduct);
+router.post('/edit-product', authenticationMiddleware, adminController.updateProduct);
 
-router.post('/delete-product', adminController.deleteProduct);
+router.post('/delete-product', authenticationMiddleware, adminController.deleteProduct);
 
 module.exports = router;

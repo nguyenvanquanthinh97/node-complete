@@ -14,12 +14,24 @@
     "nodemon": "^2.0.2"
   },
   "dependencies": {
+    "@hapi/joi": "^17.1.0",
+    "@sendgrid/mail": "^6.5.2",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
+    "connect-mongodb-session": "^2.3.1",
+    "cookie-parser": "^1.4.4",
+    "csurf": "^1.11.0",
+    "dotenv": "^8.2.0",
+    "email-templates": "^7.0.2",
     "express": "^4.17.1",
+    "express-session": "^1.17.0",
     "lodash": "^4.17.15",
     "mongodb": "^3.5.2",
+    "mongoose": "^5.8.12",
     "mysql2": "^2.1.0",
     "pug": "^2.0.4",
+    "randombytes": "^2.1.0",
     "uniqid": "^5.2.0"
   },
   "nodemonConfig": {

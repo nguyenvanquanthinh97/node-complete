@@ -18,6 +18,7 @@ block content
                     .card__actions
                         a.btn(href=`/admin/edit-product/${product._id}`) Edit
                         form(action="/admin/delete-product", method="post")
+                            input(type="hidden", name="_csrf", value = csrfToken) 
                             input(type="hidden", name="productId", value=product._id)
                             button.btn(type="submit") Delete
     else

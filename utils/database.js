@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 
-const url = 'mongodb+srv://Thinh97:0981864371@office-manager-3cpmo.mongodb.net/test?retryWrites=true&w=majority';
+const url = process.env.MONGODB_URL || "mongodb://127.0.0.1:27017/";
 
 let _db;
 

@@ -13,7 +13,9 @@ block content
             .card__content
                 h2.product__price #{product.price}
                 p.product__description #{product.description}
-            .card__actions
-                form(action="/shop/cart", method="post")
-                    input(type="hidden", name="productId", value=product._id)
-                    button.btn(type="submit") Add to cart                                                                                        
+            if isAuthenticated
+                .card__actions
+                    form(action="/shop/cart", method="post")
+                        input(type="hidden", name="_csrf", value = csrfToken) 
+                        input(type="hidden", name="productId", value=product._id)
+                        button.btn(type="submit") Add to cart                                                                                        

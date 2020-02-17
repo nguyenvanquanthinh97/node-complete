@@ -1,0 +1,17 @@
+extends ../layouts/main-layout.pug
+
+block style 
+    link(rel="stylesheet", href="/css/form.css")
+    link(rel="stylesheet", href="/css/auth.css")
+
+block content
+    .login-form
+        if error
+            .user-message.user-message--error
+                p=error
+        form(action="/auth/reset", method="post")
+            input(type="hidden", name="_csrf", value = csrfToken) 
+            .form-control
+                label(for="username") Email:
+                input#username(type="text", name="email")
+            button.btn(type="submit") Reset

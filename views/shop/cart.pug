@@ -6,12 +6,14 @@ block content
             each product in products
                 li.cart-item #{product.title}  (#{product.qty})
                 form(action="/shop/delete-cart-item", method="post")
+                    input(type="hidden", name="_csrf", value = csrfToken) 
                     input(type="hidden", name="productId", value=product._id)
                     button.btn.danger(type="submit") Delete
         
         hr
         .center
             form(action="/shop/create-order", method="post")
+                input(type="hidden", name="_csrf", value = csrfToken) 
                 button.btn(type="submit") Order Now !
     
     else 
