@@ -17,9 +17,11 @@ block content
                         p.product__description #{product.description}
                     .card__actions
                         a.btn(href=`/admin/edit-product/${product._id}`) Edit
-                        form(action="/admin/delete-product", method="post")
-                            input(type="hidden", name="_csrf", value = csrfToken) 
-                            input(type="hidden", name="productId", value=product._id)
-                            button.btn(type="submit") Delete
+                        //- form(action="/admin/delete-product", method="post")
+                        input(type="hidden", name="_csrf", value = csrfToken) 
+                        input(type="hidden", name="productId", value=product._id)
+                        button.btn(type="submit", onClick="deleteProduct(this)") Delete
     else
         h1 No Products Found
+
+    script(src="/js/admin.js") 

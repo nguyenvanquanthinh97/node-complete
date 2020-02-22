@@ -3,6 +3,7 @@ const _ = require('lodash');
 const EmailTemplate = require('email-templates');
 const sgMail = require('@sendgrid/mail');
 const randomBytes = require('randombytes');
+const Joi = require('@hapi/joi');
 
 const User = require('../models/user');
 
@@ -24,10 +25,27 @@ module.exports.getLogin = (req, res, next) => {
 };
 
 module.exports.postLogin = (req, res, next) => {
-    const email = _.get(req.body, 'email');
+    let email = _.get(req.body, 'email');
     const inputPassword = _.get(req.body, 'password');
 
-    return User.findByEmail(email)
+    const schema = Joi.object().keys({
+        _csrf: Joi.string(),
+        email: Joi.string().trim().email().required(),
+        password: Joi.string().required()
+    });
+
+    const { error, value } = schema.validate(req.body);
+
+    if (error) {
+        // console.log(error);
+        return res.render("auth/login", {
+            docTitle: "Login Page",
+            path: "/auth/login",
+            isAuthenticated: _.get(req.session, 'isLoggedIn'),
+            error: _.get(error, "details[0].message")
+        });
+    }
+    return User.findByEmail(_.get(value, 'email'))
         .then(user => {
             if (!user) {
                 req.flash('error', 'Invalid Email or Password');
@@ -84,6 +102,25 @@ module.exports.postSignup = (req, res, next) => {
     const password = _.get(req.body, 'password');
     const confirmPassword = _.get(req.body, 'confirmPassword');
     const email = _.get(req.body, 'email');
+
+    const schema = Joi.object().keys({
+        username: Joi.string(),
+        _csrf: Joi.string(),
+        email: Joi.string().trim().email().required(),
+        password: Joi.string().min(5).alphanum().required(),
+        confirmPassword: Joi.string().equal(Joi.ref('password')).required().error(new Error("Confirm Password must be equal to Password"))
+    });
+
+    const { error } = schema.validate(req.body);
+
+    console.log(error);
+    if (error) {
+        res.status(444).render('auth/signup', {
+            docTitle: "Signup Page",
+            path: "/auth/signup",
+            error: _.get(error, "details[0].message", error)
+        });
+    }
 
     if (confirmPassword !== password) {
         req.flash('error', "Password doesn't match with Confirm Passsword");
@@ -186,4 +223,58 @@ module.exports.postReset = (req, res, next) => {
                 console.log(err);
             });
     });
+};
+
+module.exports.getResetPassword = (req, res, next) => {
+
+    const token = _.get(req.params, 'token');
+
+    return User.findByToken(token)
+        .then(user => {
+            if (!user) {
+                req.flash('error', 'Token is no lenger valid');
+                return res.redirect('/auth/reset');
+            }
+            res.render('auth/reset-password', {
+                docTitle: 'Reset Password',
+                path: '/auth/reset/:token',
+                userId: user._id,
+                token
+            });
+        })
+        .catch(err => console.log(err));
+};
+
+module.exports.postResetPassword = (req, res, next) => {
+    const token = _.get(req.body, 'token');
+    const userId = _.get(req.body, 'userId');
+    const password = _.get(req.body, 'password');
+    const confirmPassword = _.get(req.body, 'confirmPassword');
+
+    if (password !== confirmPassword) {
+        req.flash('error', "Password doesn't match with Confirm Password");
+        return res.render('auth/reset-password', {
+            docTitle: 'Reset Password',
+            path: '/auth/reset/:token',
+            userId,
+            token
+        });
+    }
+
+    return User.findById(userId)
+        .then(user => {
+            if (_.get(user, 'token') === token && _.get(user, 'expiration') > Date.now()) {
+                return bcrypt.genSalt(12)
+                    .then(salt => bcrypt.hash(password, salt))
+                    .then(hashPassword => {
+                        res.redirect('/auth/login');
+                        return User.updatePassword(userId, hashPassword);
+                    });
+            }
+            throw new Error('Token is overdued');
+        })
+        .catch(err => {
+            console.log(err);
+            res.redirect('/auth/login');
+        });
 };

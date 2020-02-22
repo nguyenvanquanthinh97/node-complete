@@ -54,4 +54,25 @@ module.exports = class Product {
             .deleteOne({ _id: new ObjectId(productId) })
             .catch(err => console.log(err));
     }
+
+    static fetchProductsByUserId(userId) {
+        const db = getDB();
+        return db.collection('products')
+            .find({ userId: new ObjectId(userId) })
+            .toArray();
+    }
+
+    static deleteWithUserId(productId, userId) {
+        const db = getDB();
+        return db.collection('products')
+            .deleteOne({ _id: new ObjectId(productId), userId: new ObjectId(userId) });
+    }
+
+    static updateWithUserId(productId, updatedProduct, userId){
+        const db = getDB();
+        updatedProduct = _.omit(updatedProduct, ['productId']);
+        return db.collection('products')
+            .updateOne({ _id: new ObjectId(productId), userId: new ObjectId(userId) }, { $set: updatedProduct })
+            .catch(err => console.log(err));
+    }
 };

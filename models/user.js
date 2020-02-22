@@ -113,6 +113,13 @@ module.exports = class User {
             .catch(err => console.log(err));
     }
 
+    static findOrderById(orderId) {
+        const db = getDB();
+        
+        return db.collection('orders')
+            .findOne({ _id: new ObjectId(orderId) });
+    }
+
     static updateToken(userId, token, expiration) {
         const db = getDB();
 
@@ -131,5 +138,17 @@ module.exports = class User {
         const db = getDB();
         return db.collection('users')
             .findOne({ email: email });
+    }
+
+    static findByToken(token) {
+        const db = getDB();
+        return db.collection('users')
+            .findOne({ token: token, expiration: { $gt: Date.now() } });
+    }
+
+    static updatePassword(userId, newPassword) {
+        const db = getDB();
+        return db.collection('users')
+            .updateOne({ _id: new ObjectId(userId) }, { $set: { password: newPassword, token: null, expiration: null } });
     }
 };

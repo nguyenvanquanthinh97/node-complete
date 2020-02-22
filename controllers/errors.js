@@ -6,3 +6,10 @@ module.exports.error404 = (req, res, next) => {
         isAuthenticated: _.get(req.session, 'isLoggedIn')
     });
 }
+
+module.exports.error500 = (req, res, next) => {
+    res.status(500).render('500', {
+        docTitle: 'Internal Error',
+        isAuthenticated: _.get(req.session, 'isLoggedIn')
+    })
+}
